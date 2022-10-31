@@ -1,0 +1,21 @@
+
+１、安装megface: 
+selfcel mount g:rsde/megface
+/unsullied/sharefs/g:rsde/megface/install-v2 
+会在　~/　目录默认安装megfac-v2,  其中包含了调用megface所需要的lib (libmegface.so), C++ include/src, python 接口
+
+２、安装hako，修改模型
+按照　http://wiki.megvii-inc.com/pages/viewpage.action?pageId=8455509 MegFace 模型打包流程
+直至步骤６能成功打包模型。
+在FaceModel 可以看到分别生成的model和config，其中model是每次替换的模型，config是打包多个模型得到的conf文件
+如果需要替换conf文件，首先打包model, 然后找一个完全类似的场景，保留其他不变的model替换要修改的conf
+如：生成detector.mobile.fast.v3.1.conf, 替换其中的lmk.track.v2.small.170316为lmk.detector.v3.1
+１、在model/src下建一个目录：复制lmk.track.v2.small.170316为lmk.detector.v3.1，替换掉其中的model.pkl
+２、在config/src下新建一个文件：复制detector.mobile.fast.v3.conf为detector.mobile.fast.v3.1.conf，修改其中的lmk.track.v2.small.170316为lmk.detector.v3.1
+３、回到FaceModel目录，执行../hako model all 和../hako config all 就分别更新了所需要的model和config
+
+３、执行megface
+修改megfaceInit.py里的
+libmegafce.so -> ~/megfac-v2/lib/libmegface.so
+detector.conf -> detector.mobile.fast.v3.1.conf
+
